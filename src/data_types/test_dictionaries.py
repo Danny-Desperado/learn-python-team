@@ -97,6 +97,14 @@ def test_dictionary_retrieval():
     # get() returns None for a missing key instead of raising an error.
     assert stock.get('mangoes') is None
 
+    # A key can exist even when its stored value is None.
+    stock['dates'] = None
+    assert stock.get('dates') is None
+
+    # The 'in' operator distinguishes an existing None value from a missing key.
+    assert 'dates' in stock
+    assert 'mangoes' not in stock
+
     # The second argument of get() is the default value returned for a missing key.
     assert stock.get('mangoes', 0) == 0
 
@@ -104,14 +112,14 @@ def test_dictionary_retrieval():
     assert stock.get('bananas', 100) == 0
 
     # keys(), values() and items() give access to the content of the dictionary.
-    assert list(stock.keys()) == ['apples', 'bananas', 'cherries']
-    assert list(stock.values()) == [10, 0, 25]
-    assert list(stock.items()) == [('apples', 10), ('bananas', 0), ('cherries', 25)]
+    assert list(stock.keys()) == ['apples', 'bananas', 'cherries', 'dates']
+    assert list(stock.values()) == [10, 0, 25, None]
+    assert list(stock.items()) == [('apples', 10), ('bananas', 0), ('cherries', 25), ('dates', None)]
 
     # items() is handy for looping over keys and values at the same time.
     in_stock = []
     for fruit, quantity in stock.items():
-        if quantity > 0:
+        if quantity is not None and quantity > 0:
             in_stock.append(fruit)
     assert in_stock == ['apples', 'cherries']
 
