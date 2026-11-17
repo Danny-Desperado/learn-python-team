@@ -370,3 +370,35 @@ def test_list_sorting():
     students = [('Alice', 'B'), ('Bob', 'A'), ('Carol', 'B'), ('Dave', 'A')]
     by_grade = sorted(students, key=lambda student: student[1])
     assert by_grade == [('Bob', 'A'), ('Dave', 'A'), ('Alice', 'B'), ('Carol', 'B')]
+
+
+def test_list_slicing_and_filtering():
+    """Slicing with a step and filtering lists.
+
+    A slice can take a third value, the step: list[start:stop:step]. A negative step walks
+    through the list backwards. Filtering keeps only the items that satisfy a condition, either
+    with a list comprehension or with the built-in filter() function.
+    """
+
+    numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    # Take every second item, starting from the first one.
+    assert numbers[::2] == [0, 2, 4, 6, 8]
+
+    # Take every third item from index 1 (included) up to index 8 (excluded).
+    assert numbers[1:8:3] == [1, 4, 7]
+
+    # A negative step walks backwards, so [::-1] returns a reversed copy of the list.
+    assert numbers[::-1] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+    assert numbers == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # the original list is unchanged
+
+    # Slicing does not raise an IndexError when the stop index goes past the end of the list.
+    assert numbers[8:100] == [8, 9]
+
+    # Filtering with a list comprehension: keep only the even numbers.
+    even_numbers = [number for number in numbers if number % 2 == 0]
+    assert even_numbers == [0, 2, 4, 6, 8]
+
+    # filter() does the same job. It returns an iterator, so we convert it back to a list.
+    odd_numbers = list(filter(lambda number: number % 2 == 1, numbers))
+    assert odd_numbers == [1, 3, 5, 7, 9]
