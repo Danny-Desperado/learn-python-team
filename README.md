@@ -1,5 +1,9 @@
 # Playground and Cheatsheet for Learning Python
 
+> **Team repository for the SCM assignment.** This copy of `learn-python` is the team's
+> original repository, maintained by Student A. Students B, C and D contribute through
+> their own forks and pull requests.
+
 > 🇺🇦 UKRAINE [IS BEING ATTACKED](https://war.ukraine.ua/) BY RUSSIAN ARMY. CIVILIANS ARE GETTING KILLED. RESIDENTIAL AREAS ARE GETTING BOMBED.
 > - Help Ukraine via:
 >   - [Serhiy Prytula Charity Foundation](https://prytulafoundation.org/en/)
