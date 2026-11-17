@@ -20,6 +20,8 @@ Placing a comma-separated list of key:value pairs within the braces adds initial
 to the dictionary; this is also the way dictionaries are written on output.
 """
 
+import pytest
+
 
 def test_dictionary():
     """Dictionary"""
@@ -77,3 +79,82 @@ def test_dictionary():
     assert dictionary_for_string_keys['sape'] == 4139
     assert dictionary_for_string_keys['guido'] == 4127
     assert dictionary_for_string_keys['jack'] == 4098
+
+
+def test_dictionary_retrieval():
+    """Retrieving entries from a dictionary.
+
+    Reading a missing key with square brackets raises a KeyError. The get() method is a safer
+    alternative: it returns None, or a default value of your choice, when the key is missing.
+    """
+
+    stock = {'apples': 10, 'bananas': 0, 'cherries': 25}
+
+    # Square brackets raise a KeyError when the key does not exist.
+    with pytest.raises(KeyError):
+        stock['mangoes']  # pylint: disable=pointless-statement
+
+    # get() returns None for a missing key instead of raising an error.
+    assert stock.get('mangoes') is None
+
+    # A key can exist even when its stored value is None.
+    stock['dates'] = None
+    assert stock.get('dates') is None
+
+    # The 'in' operator distinguishes an existing None value from a missing key.
+    assert 'dates' in stock
+    assert 'mangoes' not in stock
+
+    # The second argument of get() is the default value returned for a missing key.
+    assert stock.get('mangoes', 0) == 0
+
+    # The default is only used when the key is missing, not when the stored value is 0.
+    assert stock.get('bananas', 100) == 0
+
+    # keys(), values() and items() give access to the content of the dictionary.
+    assert list(stock.keys()) == ['apples', 'bananas', 'cherries', 'dates']
+    assert list(stock.values()) == [10, 0, 25, None]
+    assert list(stock.items()) == [('apples', 10), ('bananas', 0), ('cherries', 25), ('dates', None)]
+
+    # items() is handy for looping over keys and values at the same time.
+    in_stock = []
+    for fruit, quantity in stock.items():
+        if quantity is not None and quantity > 0:
+            in_stock.append(fruit)
+    assert in_stock == ['apples', 'cherries']
+
+
+def test_dictionary_update_and_remove():
+    """Updating and removing dictionary entries.
+
+    The update() method adds or overwrites several entries at once. The pop() method removes a key
+    and returns its value, while popitem() removes and returns the most recently added pair.
+    """
+
+    grades = {'Alice': 85, 'Bob': 72}
+
+    # update() overwrites the value of an existing key and adds the keys that are new.
+    grades.update({'Bob': 78, 'Carol': 91})
+    assert grades == {'Alice': 85, 'Bob': 78, 'Carol': 91}
+
+    # setdefault() adds the key only if it is missing, then returns the value stored for it.
+    assert grades.setdefault('Dave', 60) == 60
+    assert grades.setdefault('Alice', 0) == 85  # Alice already has a grade, so it is kept
+    assert grades == {'Alice': 85, 'Bob': 78, 'Carol': 91, 'Dave': 60}
+
+    # pop() removes a key and returns its value.
+    assert grades.pop('Dave') == 60
+    assert 'Dave' not in grades
+
+    # pop() raises a KeyError for a missing key, unless a default value is given.
+    assert grades.pop('Eve', None) is None
+    with pytest.raises(KeyError):
+        grades.pop('Eve')
+
+    # popitem() removes and returns the last key/value pair that was inserted.
+    assert grades.popitem() == ('Carol', 91)
+    assert grades == {'Alice': 85, 'Bob': 78}
+
+    # clear() removes every entry. An empty dictionary is "falsy" in a condition.
+    grades.clear()
+    assert not grades
