@@ -46,3 +46,21 @@ def test_if_elif_chain(number_grade):
 
 assert test_if_elif_chain(90) == 'A'
 
+
+def get_ticket_price(age, is_student):
+
+    if age < 18:
+        if age < 5:
+            price = 0
+        else:
+            price = 5
+    else:
+        if is_student:
+            price = 8
+        else:
+            price = 12
+    return price
+
+
+assert get_ticket_price(18, True) == 8
+assert get_ticket_price(12, True) == 5
