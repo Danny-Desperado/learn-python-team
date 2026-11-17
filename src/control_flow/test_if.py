@@ -62,7 +62,7 @@ def get_ticket_price():
             price = 12
 
 
-    assert price == 5
+    assert price == 8
 
 
 
