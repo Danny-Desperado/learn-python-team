@@ -114,3 +114,39 @@ def test_dictionary_retrieval():
         if quantity > 0:
             in_stock.append(fruit)
     assert in_stock == ['apples', 'cherries']
+
+
+def test_dictionary_update_and_remove():
+    """Updating and removing dictionary entries.
+
+    The update() method adds or overwrites several entries at once. The pop() method removes a key
+    and returns its value, while popitem() removes and returns the most recently added pair.
+    """
+
+    grades = {'Alice': 85, 'Bob': 72}
+
+    # update() overwrites the value of an existing key and adds the keys that are new.
+    grades.update({'Bob': 78, 'Carol': 91})
+    assert grades == {'Alice': 85, 'Bob': 78, 'Carol': 91}
+
+    # setdefault() adds the key only if it is missing, then returns the value stored for it.
+    assert grades.setdefault('Dave', 60) == 60
+    assert grades.setdefault('Alice', 0) == 85  # Alice already has a grade, so it is kept
+    assert grades == {'Alice': 85, 'Bob': 78, 'Carol': 91, 'Dave': 60}
+
+    # pop() removes a key and returns its value.
+    assert grades.pop('Dave') == 60
+    assert 'Dave' not in grades
+
+    # pop() raises a KeyError for a missing key, unless a default value is given.
+    assert grades.pop('Eve', None) is None
+    with pytest.raises(KeyError):
+        grades.pop('Eve')
+
+    # popitem() removes and returns the last key/value pair that was inserted.
+    assert grades.popitem() == ('Carol', 91)
+    assert grades == {'Alice': 85, 'Bob': 78}
+
+    # clear() removes every entry. An empty dictionary is "falsy" in a condition.
+    grades.clear()
+    assert not grades
