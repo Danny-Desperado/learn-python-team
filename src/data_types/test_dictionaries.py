@@ -20,6 +20,8 @@ Placing a comma-separated list of key:value pairs within the braces adds initial
 to the dictionary; this is also the way dictionaries are written on output.
 """
 
+import pytest
+
 
 def test_dictionary():
     """Dictionary"""
@@ -77,3 +79,38 @@ def test_dictionary():
     assert dictionary_for_string_keys['sape'] == 4139
     assert dictionary_for_string_keys['guido'] == 4127
     assert dictionary_for_string_keys['jack'] == 4098
+
+
+def test_dictionary_retrieval():
+    """Retrieving entries from a dictionary.
+
+    Reading a missing key with square brackets raises a KeyError. The get() method is a safer
+    alternative: it returns None, or a default value of your choice, when the key is missing.
+    """
+
+    stock = {'apples': 10, 'bananas': 0, 'cherries': 25}
+
+    # Square brackets raise a KeyError when the key does not exist.
+    with pytest.raises(KeyError):
+        stock['mangoes']  # pylint: disable=pointless-statement
+
+    # get() returns None for a missing key instead of raising an error.
+    assert stock.get('mangoes') is None
+
+    # The second argument of get() is the default value returned for a missing key.
+    assert stock.get('mangoes', 0) == 0
+
+    # The default is only used when the key is missing, not when the stored value is 0.
+    assert stock.get('bananas', 100) == 0
+
+    # keys(), values() and items() give access to the content of the dictionary.
+    assert list(stock.keys()) == ['apples', 'bananas', 'cherries']
+    assert list(stock.values()) == [10, 0, 25]
+    assert list(stock.items()) == [('apples', 10), ('bananas', 0), ('cherries', 25)]
+
+    # items() is handy for looping over keys and values at the same time.
+    in_stock = []
+    for fruit, quantity in stock.items():
+        if quantity > 0:
+            in_stock.append(fruit)
+    assert in_stock == ['apples', 'cherries']
