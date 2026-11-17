@@ -8,6 +8,8 @@ parenthesized list of formal parameters. The statements that form the body of th
 the next line, and must be indented.
 """
 
+import pytest
+
 
 def fibonacci_function_example(number_limit):
     """Generate a Fibonacci series up to number_limit.
@@ -121,3 +123,75 @@ def test_function_definition():
     greet_with_closure = compose_greet_func_with_closure('John')
 
     assert greet_with_closure() == 'Hello there, John!'
+
+
+def rectangle_area_example(width, height):
+    """Return the area of a rectangle after validating the parameters.
+
+    Checking the arguments at the start of a function makes mistakes easier to find: the caller
+    gets a clear exception instead of a wrong result.
+    """
+
+    for value in (width, height):
+        # isinstance() checks the type of a value. Here we accept integers and floats only.
+        if not isinstance(value, (int, float)):
+            raise TypeError('Width and height must be numbers')
+        if value < 0:
+            raise ValueError('Width and height cannot be negative')
+
+    return width * height
+
+
+def test_function_input_validation():
+    """Parameters, return values and input validation"""
+
+    # Valid arguments: the function returns the computed value.
+    assert rectangle_area_example(3, 4) == 12
+    assert rectangle_area_example(2.5, 2) == 5.0
+    assert rectangle_area_example(0, 10) == 0
+
+    # Invalid arguments: the function raises an exception instead of returning a value.
+    with pytest.raises(ValueError):
+        rectangle_area_example(-1, 5)
+
+    with pytest.raises(TypeError):
+        rectangle_area_example('3', 4)
+
+
+def min_max_average_example(numbers):
+    """Return the smallest value, the largest value and the average of a list of numbers.
+
+    A function can return several values at once by separating them with commas. Python packs
+    them into a tuple, which the caller can unpack into separate variables.
+    """
+
+    if not numbers:
+        raise ValueError('The list of numbers must not be empty')
+
+    return min(numbers), max(numbers), sum(numbers) / len(numbers)
+
+
+def test_function_multiple_return_values():
+    """Returning several values from a function"""
+
+    # The returned values arrive together as one tuple.
+    result = min_max_average_example([4, 8, 6])
+    assert isinstance(result, tuple)
+    assert result == (4, 8, 6.0)
+
+    # Tuple unpacking assigns each returned value to its own variable.
+    smallest, largest, average = min_max_average_example([10, 2, 3])
+    assert smallest == 2
+    assert largest == 10
+    assert average == 5.0
+
+    # With a single number, the minimum, the maximum and the average are the same value.
+    assert min_max_average_example([7]) == (7, 7, 7.0)
+
+    # Floats work the same way as integers.
+    assert min_max_average_example([1.5, 2.5]) == (1.5, 2.5, 2.0)
+
+    # An empty list has no minimum, maximum or average, so the function rejects it.
+    # match= also checks that the error message explains the problem.
+    with pytest.raises(ValueError, match='must not be empty'):
+        min_max_average_example([])
