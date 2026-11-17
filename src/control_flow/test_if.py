@@ -26,3 +26,44 @@ def test_if_statement():
         conclusion = 'Number bigger than or equal to one'
 
     assert conclusion == 'Number bigger than or equal to one'
+
+
+def test_if_elif_chain():
+
+    number_grade=89
+    grade = 'F'
+
+    if number_grade >= 90:
+        grade = 'A'
+    elif number_grade >= 80:
+        grade = 'B'
+    elif number_grade >= 70:
+        grade = 'C'
+    else:
+        grade = 'F'
+
+    assert grade=='B'
+
+
+def get_ticket_price():
+
+    age = 83
+    is_student = True
+
+    if age < 18:
+        if age < 5:
+            price = 0
+        else:
+            price = 5
+    else:
+        if is_student:
+            price = 8
+        else:
+            price = 12
+
+
+    assert price == 8
+
+
+
+
