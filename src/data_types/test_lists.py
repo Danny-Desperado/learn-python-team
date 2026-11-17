@@ -336,3 +336,69 @@ def test_nested_list_comprehensions():
         (3, 7, 11),
         (4, 8, 12),
     ]
+
+
+def test_list_sorting():
+    """Sorting lists.
+
+    Python offers two ways to sort a list. The list.sort() method sorts the list in place and
+    returns None, while the built-in sorted() function returns a new sorted list and leaves the
+    original list unchanged.
+    """
+
+    numbers = [5, 2, 9, 1, 7]
+
+    # sorted() returns a new list. The original list keeps its order.
+    sorted_numbers = sorted(numbers)
+    assert sorted_numbers == [1, 2, 5, 7, 9]
+    assert numbers == [5, 2, 9, 1, 7]
+
+    # list.sort() changes the list itself and returns None.
+    assert numbers.sort() is None
+    assert numbers == [1, 2, 5, 7, 9]
+
+    # Both accept reverse=True to sort in descending order.
+    assert sorted(numbers, reverse=True) == [9, 7, 5, 2, 1]
+
+    # The key argument takes a function that is called on every item before the items are
+    # compared. Here the words are sorted by their length instead of alphabetically.
+    words = ['banana', 'kiwi', 'apple', 'fig']
+    assert sorted(words, key=len) == ['fig', 'kiwi', 'apple', 'banana']
+
+    # Sorting is stable: items with equal keys keep their original relative order.
+    # Bob and Dave both have grade 'A', so Bob stays in front of Dave.
+    students = [('Alice', 'B'), ('Bob', 'A'), ('Carol', 'B'), ('Dave', 'A')]
+    by_grade = sorted(students, key=lambda student: student[1])
+    assert by_grade == [('Bob', 'A'), ('Dave', 'A'), ('Alice', 'B'), ('Carol', 'B')]
+
+
+def test_list_slicing_and_filtering():
+    """Slicing with a step and filtering lists.
+
+    A slice can take a third value, the step: list[start:stop:step]. A negative step walks
+    through the list backwards. Filtering keeps only the items that satisfy a condition, either
+    with a list comprehension or with the built-in filter() function.
+    """
+
+    numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    # Take every second item, starting from the first one.
+    assert numbers[::2] == [0, 2, 4, 6, 8]
+
+    # Take every third item from index 1 (included) up to index 8 (excluded).
+    assert numbers[1:8:3] == [1, 4, 7]
+
+    # A negative step walks backwards, so [::-1] returns a reversed copy of the list.
+    assert numbers[::-1] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+    assert numbers == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # the original list is unchanged
+
+    # Slicing does not raise an IndexError when the stop index goes past the end of the list.
+    assert numbers[8:100] == [8, 9]
+
+    # Filtering with a list comprehension: keep only the even numbers.
+    even_numbers = [number for number in numbers if number % 2 == 0]
+    assert even_numbers == [0, 2, 4, 6, 8]
+
+    # filter() does the same job. It returns an iterator, so we convert it back to a list.
+    odd_numbers = list(filter(lambda number: number % 2 == 1, numbers))
+    assert odd_numbers == [1, 3, 5, 7, 9]
