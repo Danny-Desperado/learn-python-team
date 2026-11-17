@@ -26,3 +26,23 @@ def test_if_statement():
         conclusion = 'Number bigger than or equal to one'
 
     assert conclusion == 'Number bigger than or equal to one'
+
+
+def test_if_elif_chain(number_grade):
+
+    grade = 'F'
+
+    if number_grade >= 90:
+        grade = 'A'
+    elif number_grade >= 80:
+        grade = 'B'
+    elif number_grade >= 70:
+        grade = 'C'
+    else:
+        grade = 'F'
+
+    return grade
+
+
+assert test_if_elif_chain(90) == 'A'
+
