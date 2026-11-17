@@ -156,3 +156,35 @@ def test_function_input_validation():
 
     with pytest.raises(TypeError):
         rectangle_area_example('3', 4)
+
+
+def min_max_average_example(numbers):
+    """Return the smallest value, the largest value and the average of a list of numbers.
+
+    A function can return several values at once by separating them with commas. Python packs
+    them into a tuple, which the caller can unpack into separate variables.
+    """
+
+    if not numbers:
+        raise ValueError('The list of numbers must not be empty')
+
+    return min(numbers), max(numbers), sum(numbers) / len(numbers)
+
+
+def test_function_multiple_return_values():
+    """Returning several values from a function"""
+
+    # The returned values arrive together as one tuple.
+    result = min_max_average_example([4, 8, 6])
+    assert isinstance(result, tuple)
+    assert result == (4, 8, 6.0)
+
+    # Tuple unpacking assigns each returned value to its own variable.
+    smallest, largest, average = min_max_average_example([10, 2, 3])
+    assert smallest == 2
+    assert largest == 10
+    assert average == 5.0
+
+    # An empty list has no minimum, maximum or average, so the function rejects it.
+    with pytest.raises(ValueError):
+        min_max_average_example([])
