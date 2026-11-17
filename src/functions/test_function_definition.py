@@ -185,6 +185,13 @@ def test_function_multiple_return_values():
     assert largest == 10
     assert average == 5.0
 
+    # With a single number, the minimum, the maximum and the average are the same value.
+    assert min_max_average_example([7]) == (7, 7, 7.0)
+
+    # Floats work the same way as integers.
+    assert min_max_average_example([1.5, 2.5]) == (1.5, 2.5, 2.0)
+
     # An empty list has no minimum, maximum or average, so the function rejects it.
-    with pytest.raises(ValueError):
+    # match= also checks that the error message explains the problem.
+    with pytest.raises(ValueError, match='must not be empty'):
         min_max_average_example([])
